@@ -1,0 +1,24 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  name: String!
+  password: String!
+}
+
+type Query {
+  index: String!
+  users(userId: Int!): User
+}
+
+type Mutation {
+  register(addUserArgs: AddUserArgs!): String!
+  updateUser(userId: Int!, addUserArgs: AddUserArgs!): String!
+  deleteUser(userId: Int!): String!
+}
+
+input AddUserArgs {
+  name: String!
+  password: String!
+}
