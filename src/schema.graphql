@@ -2,23 +2,23 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
-  name: String!
-  password: String!
+type Auth {
+  token: String!
+  userId: String!
 }
 
 type Query {
   index: String!
-  users(userId: Int!): User
+  users: String
 }
 
 type Mutation {
-  register(addUserArgs: AddUserArgs!): String!
-  updateUser(userId: Int!, addUserArgs: AddUserArgs!): String!
-  deleteUser(userId: Int!): String!
+  register(addUserArgs: UserArgs!): String!
+  login(loginUser: UserArgs!): Auth!
+  deleteUser: String!
 }
 
-input AddUserArgs {
-  name: String!
+input UserArgs {
+  email: String!
   password: String!
 }

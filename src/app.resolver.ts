@@ -1,8 +1,8 @@
 import { Resolver, Query } from '@nestjs/graphql';
 
-@Resolver((of) => String)
+@Resolver(() => String)
 export class AppResolver {
-  @Query((returns) => String)
+  @Query(() => String)
   index() {
     return 'Hello World';
   }

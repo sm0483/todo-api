@@ -1,32 +1,36 @@
-import { Resolver, Query, Args, Mutation, Int } from '@nestjs/graphql';
-import { User } from './schema/auth.schema';
+import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
+import { User } from './schema/user.schema';
 import { AuthService } from './auth.service';
-import { AddUserArgs } from './args/add.user.args';
+import { UserArgs } from './args/add.user.args';
+import { Auth } from './schema/auth.schema';
+import { UseGuards } from '@nestjs/common';
+import { JwtAccessTokenGuard } from '../guards/access.token.guard';
+import { Context } from '@nestjs/graphql';
 
 @Resolver(() => User)
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
   @Mutation(() => String, { name: 'register' })
-  register(@Args('addUserArgs') addUserArgs: AddUserArgs) {
+  register(@Args('addUserArgs') addUserArgs: UserArgs) {
     return this.authService.createUser(addUserArgs);
   }
 
-  @Query(() => User, { name: 'users', nullable: true })
-  getUser(@Args({ name: 'userId', type: () => Int }) id: number) {
+  @Mutation(() => Auth, { name: 'login' })
+  login(@Args('loginUser') loginUser: UserArgs) {
+    return this.authService.login(loginUser);
+  }
+
+  @UseGuards(JwtAccessTokenGuard)
+  @Query(() => String, { name: 'users', nullable: true })
+  getUser(@Context('user') user) {
+    const id = user.sub;
     return this.authService.getUser(id);
   }
 
-  @Mutation(() => String, { name: 'updateUser' })
-  updateUser(
-    @Args({ name: 'userId', type: () => Int }) id: number,
-    @Args('addUserArgs') addUserArgs: AddUserArgs
-  ) {
-    return this.authService.updateUser(id, addUserArgs);
-  }
-
+  @UseGuards(JwtAccessTokenGuard)
   @Mutation(() => String, { name: 'deleteUser' })
-  deleteUser(@Args({ name: 'userId', type: () => Int }) id: number) {
-    return this.authService.deleteUser(id);
+  deleteUser(@Context('user') user) {
+    return this.authService.deleteUser(user.sub);
   }
 }

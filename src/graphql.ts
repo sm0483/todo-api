@@ -8,25 +8,25 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export interface AddUserArgs {
-    name: string;
+export interface UserArgs {
+    email: string;
     password: string;
 }
 
-export interface User {
-    name: string;
-    password: string;
+export interface Auth {
+    token: string;
+    userId: string;
 }
 
 export interface IQuery {
     index(): string | Promise<string>;
-    users(userId: number): Nullable<User> | Promise<Nullable<User>>;
+    users(): Nullable<string> | Promise<Nullable<string>>;
 }
 
 export interface IMutation {
-    register(addUserArgs: AddUserArgs): string | Promise<string>;
-    updateUser(userId: number, addUserArgs: AddUserArgs): string | Promise<string>;
-    deleteUser(userId: number): string | Promise<string>;
+    register(addUserArgs: UserArgs): string | Promise<string>;
+    login(loginUser: UserArgs): Auth | Promise<Auth>;
+    deleteUser(): string | Promise<string>;
 }
 
 type Nullable<T> = T | null;

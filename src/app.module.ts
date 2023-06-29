@@ -1,29 +1,22 @@
 import { Module } from '@nestjs/common';
-import { GraphQLModule } from '@nestjs/graphql';
-import { ApolloDriver } from '@nestjs/apollo';
-import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
 import { AppResolver } from './app.resolver';
-import { GraphQLError } from 'graphql';
+import { MongooseModule } from '@nestjs/mongoose';
+import { CustomHttpExceptionFilterProvider } from './shared/error/index';
+import { driver } from './shared/driver/graphql';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    GraphQLModule.forRoot({
-      driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'src/schema.graphql'),
-      definitions: { path: join(process.cwd(), 'src/graphql.ts') },
-      includeStacktraceInErrorResponses: false,
-      formatError: (error: GraphQLError) => {
-        const newError = {
-          message: error.message,
-          code: error.extensions.code,
-        };
-        return newError;
-      },
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+      isGlobal: true,
     }),
+    MongooseModule.forRoot(process.env.MONGO_URI),
+    driver.GraphQLModule,
     AuthModule,
   ],
   controllers: [],
-  providers: [AppResolver],
+  providers: [CustomHttpExceptionFilterProvider, AppResolver],
 })
 export class AppModule {}

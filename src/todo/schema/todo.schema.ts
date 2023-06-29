@@ -1,9 +1,9 @@
 import { ObjectType, Field } from '@nestjs/graphql';
 
 @ObjectType()
-export class Auth {
+export class Todo {
   @Field()
-  token: string;
+  task: string;
   @Field()
   userId: string;
 }
