@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { CustomHttpExceptionFilterProvider } from './shared/error/index';
 import { driver } from './shared/driver/graphql';
 import { ConfigModule } from '@nestjs/config';
+import { TodoModule } from './todo/todo.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ConfigModule } from '@nestjs/config';
     MongooseModule.forRoot(process.env.MONGO_URI),
     driver.GraphQLModule,
     AuthModule,
+    TodoModule,
   ],
   controllers: [],
   providers: [CustomHttpExceptionFilterProvider, AppResolver],

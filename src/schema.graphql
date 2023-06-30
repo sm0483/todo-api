@@ -7,18 +7,33 @@ type Auth {
   userId: String!
 }
 
+type Todo {
+  _id: String!
+  task: String!
+  user: String!
+}
+
 type Query {
   index: String!
   users: String
+  todos: [Todo!]!
+  todo(todoId: String!): Todo!
 }
 
 type Mutation {
   register(addUserArgs: UserArgs!): String!
   login(loginUser: UserArgs!): Auth!
   deleteUser: String!
+  createTodo(createTodo: AddTodo!): String!
+  deleteTodo(todoId: String!): String!
+  updateTodo(todoId: String!, todo: AddTodo!): String!
 }
 
 input UserArgs {
   email: String!
   password: String!
+}
+
+input AddTodo {
+  task: String!
 }
